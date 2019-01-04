@@ -6,4 +6,8 @@ public interface SmsServ {
 
 	String sendBatchSms(String mobile, String content, String tKey);
 
+	String sendBatchTImeSms(String mobile, String content, String tKey, String time);
+
+	String report(String tKey);
+
 }

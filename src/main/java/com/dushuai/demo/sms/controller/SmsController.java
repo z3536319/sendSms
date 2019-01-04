@@ -31,4 +31,18 @@ public class SmsController {
 		String info = this.smsServ.sendBatchSms(mobile,content,tKey);
 		return info;
 	}
+	
+	@RequestMapping("/batchsendtime")
+	public String batchSendTime(String mobile, String content, String tKey, String time) {
+		if(StringUtils.isEmpty(mobile) || StringUtils.isEmpty(content) || StringUtils.isEmpty(tKey) || StringUtils.isEmpty(time)) {
+			return "参数错误!";
+		}
+		String info = this.smsServ.sendBatchTImeSms(mobile,content,tKey,time);
+		return info;
+	}
+	
+	@RequestMapping("/report")
+	public String report(String tKey) {
+		return this.smsServ.report(tKey);
+	}
 }

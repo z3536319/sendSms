@@ -24,6 +24,10 @@ public class SmsUtil {
 	private String batchUsername;
 	@Value("${sms.batch.pwd}")
 	private String batchPwd;
+	@Value("${sms.batch.time.url}")
+	private String batchTimeUrl;
+	@Value("${sms.report.url}")
+	private String reportUrl;
 
 	public String sendSingleSms(String mobile, String content, String tKey) {
 		String info = null;
@@ -65,6 +69,45 @@ public class SmsUtil {
 		return info;
 	}
 	
+	public String sendBatchTimeSms(String mobile, String content, String tKey, String time) {
+		String info = null;
+		//String tKey = getTkey();
+		try{
+			HttpClient httpclient = new HttpClient();
+			PostMethod post = new PostMethod(batchTimeUrl);
+			post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"utf-8");
+			post.addParameter("username", batchUsername);
+			post.addParameter("mobile", mobile);
+			post.addParameter("content", content);
+			post.addParameter("time", time);
+			post.addParameter("tkey", tKey);
+			post.addParameter("password", getPwd(tKey,batchPwd));
+			httpclient.executeMethod(post);
+			info = new String(post.getResponseBody(),"utf-8");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return info;
+	}
+	
+	public String report(String tKey) {
+		String info = null;
+		//String tKey = getTkey();
+		try{
+			HttpClient httpclient = new HttpClient();
+			PostMethod post = new PostMethod(reportUrl);
+			post.getParams().setParameter(HttpMethodParams.HTTP_CONTENT_CHARSET,"utf-8");
+			post.addParameter("username", batchUsername);
+			post.addParameter("tkey", tKey);
+			post.addParameter("password", getPwd(tKey,batchPwd));
+			httpclient.executeMethod(post);
+			info = new String(post.getResponseBody(),"utf-8");
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return info;
+	}
+	
 	private String getTkey(){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
 		return sdf.format(new Date());
@@ -73,4 +116,5 @@ public class SmsUtil {
 	private String getPwd(String tKey, String password) {
 		return MD5.encode((MD5.encode(password).toLowerCase()+tKey)).toLowerCase();
 	}
+
 }

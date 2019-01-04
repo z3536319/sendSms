@@ -22,4 +22,14 @@ public class SmsServImpl implements SmsServ{
 		return smsUtil.sendBatchSms(mobile, content, tKey);
 	}
 
+	@Override
+	public String sendBatchTImeSms(String mobile, String content, String tKey, String time) {
+		return smsUtil.sendBatchTimeSms(mobile, content, tKey, time);
+	}
+
+	@Override
+	public String report(String tKey) {
+		return smsUtil.report(tKey);
+	}
+
 }
